@@ -18,7 +18,7 @@
 ### ✨ Features
 
 - **🤖 AI-Native**: Speak to your AI assistant, it records everything. No manual file editing.
-- **⚡ Zero-Friction Logging**: One slash command (`/log-devlog`) to capture a thought in 2 seconds.
+- **⚡ Zero-Friction Logging**: One slash command (`/log-devlog`) to capture a thought in 2 seconds. Or let AI auto-record during conversation.
 - **📂 Auto-Organization**: AI writes to `daily/`, scripts auto-sync to `projects/` by tag.
 - **🔌 MCP Server**: Claude Code connects directly via MCP — reliable tool calls instead of shell command guessing.
 - **🔍 Full-Text Search**: Search across all logs by keyword, date range, or project tag.
@@ -27,6 +27,8 @@
 - **📤 Backup & Export**: JSON, Markdown, or ZIP export at any time.
 - **🔗 Obsidian / Logseq**: Generate wiki-linked vaults or Logseq journals with one command.
 - **🌐 Web UI**: Optional Streamlit dashboard for browsing and visualizing your logs.
+- **🤖 Auto-Record**: AI automatically detects work progress, problems, learning, and ideas during chat — no explicit command needed.
+- **🪝 Session Hooks**: Auto-sync and generate weekly reports when AI session ends.
 - **💯 Local-First**: All data stays on your machine. No cloud, no vendor lock-in.
 
 ### 🚀 Quick Start
@@ -242,6 +244,48 @@ streamlit run devlog/webui.py
 
 ### 🔧 Advanced Features
 
+#### Auto-Recording
+
+DevLog can automatically capture valuable content from your AI conversations without explicit `/log-devlog` commands.
+
+**How it works:**
+- AI detects when you describe work progress, problems, learning, ideas, or decisions
+- Automatically calls `devlog_write_record` in the background
+- Keeps records concise (1-2 sentences)
+
+**Example conversation:**
+```
+You: Just finished the login API, testing now
+AI: [auto-records] → [14:30] · Finished login API, now testing
+
+You: Hmm, the JWT token keeps expiring too fast
+AI: [auto-records] → [14:35] × JWT token expires too fast
+
+You: Oh I see, I need to set a longer expiry in the config
+AI: [auto-records] → [14:36] - Need longer JWT expiry in config
+```
+
+**Post-Session Batch Mode:**
+If you prefer not to record in real-time, run batch analysis after a session:
+```bash
+# Analyze latest Kimi session and batch-write to daily log
+python -m devlog.auto_record --kimi
+
+# Analyze latest Claude session
+python -m devlog.auto_record --claude
+
+# Preview without writing
+python -m devlog.auto_record --kimi --dry-run
+```
+
+**Session-End Hook (Kimi Code):**
+Add to `~/.kimi/config.toml`:
+```toml
+[[hooks]]
+event = "Stop"
+command = "python -m devlog.auto_record --kimi"
+```
+
 #### Time Tracking
 
 Use time ranges and DevLog calculates durations automatically:
@@ -334,7 +378,7 @@ Issues and PRs welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 ### ✨ 核心特性
 
 - **🤖 AI 原生**：对 AI 说话就能记录，无需手动操作文件
-- **⚡ 零摩擦记录**：一条 Slash Command，2 秒 capture 一个想法
+- **⚡ 零摩擦记录**：一条 Slash Command，2 秒 capture 一个想法；或让 AI 在对话中自动识别并记录
 - **📂 自动归档**：AI 只写 `daily/`，脚本自动按 `@项目名` 标签分发到 `projects/`
 - **🔌 MCP Server**：Claude Code 通过 MCP 直连，AI 直接调用函数而非猜 shell 命令
 - **🔍 全文搜索**：支持关键词、日期范围、项目标签搜索
@@ -342,6 +386,8 @@ Issues and PRs welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 - **📤 备份导出**：随时导出 JSON / Markdown / ZIP
 - **🔗 双链笔记**：一键生成 Obsidian wiki-link 库或 Logseq 日记
 - **🌐 Web 面板**：可选 Streamlit 可视化看板
+- **🤖 自动记录**：AI 在聊天中自动识别工作进展、问题、学习、想法 —— 无需显式触发命令
+- **🪝 会话 Hook**：AI 会话结束时自动同步、生成本周回顾
 - **💯 本地优先**：所有数据保存在本地，不上传云端，无厂商锁定
 
 ### 🚀 快速开始
@@ -554,6 +600,48 @@ streamlit run devlog/webui.py
 ```
 
 ### 🔧 进阶功能
+
+#### 自动记录
+
+DevLog 可以在你使用 AI 工具对话时，自动识别有价值的内容并记录，无需显式输入 `/log-devlog`。
+
+**工作原理：**
+- AI 检测到你描述工作进展、问题、学习、想法或决策时
+- 自动在后台调用 `devlog_write_record`
+- 保持记录简洁（1-2 句话）
+
+**对话示例：**
+```
+你：刚写完登录 API，现在在测试
+AI: [自动记录] → [14:30] · 刚写完登录 API，现在在测试
+
+你：JWT token 过期太快了
+AI: [自动记录] → [14:35] × JWT token 过期太快
+
+你：哦我知道了，需要在配置里设置更长的过期时间
+AI: [自动记录] → [14:36] - 需要在配置里设置更长的 JWT 过期时间
+```
+
+**会后批量模式：**
+如果你不想实时记录，可以在会话结束后批量分析：
+```bash
+# 分析最新 Kimi 会话并批量写入 daily log
+python -m devlog.auto_record --kimi
+
+# 分析最新 Claude 会话
+python -m devlog.auto_record --claude
+
+# 预览（不写入）
+python -m devlog.auto_record --kimi --dry-run
+```
+
+**会话结束 Hook（Kimi Code）：**
+在 `~/.kimi/config.toml` 中添加：
+```toml
+[[hooks]]
+event = "Stop"
+command = "python -m devlog.auto_record --kimi"
+```
 
 #### 时间追踪
 

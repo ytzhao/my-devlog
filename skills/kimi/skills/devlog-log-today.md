@@ -4,6 +4,19 @@
 
 When user inputs `/log-devlog`, `/log-todo`, `/log-done`, `/log-bug`, `/log-learn`, `/log-idea`, `/log-inbox`, process according to the following rules.
 
+## Auto-Recording Rule
+
+When the user describes any of the following during normal conversation, AUTOMATICALLY call `devlog_write_record` without asking for permission:
+
+**Work progress:** completed, finished, done, implemented, deployed, merged, submitted, started working on, optimized, refactored, tested, reviewed
+**Problems:** error, bug, crash, exception, failure, timeout, stuck, blocked, broken, not working
+**Learning:** learned, read, studied, researched, discovered, realized, understood, documentation, principle
+**Ideas & Plans:** idea, thought, maybe, could try, plan, design, proposal, next step, follow-up, TODO
+**Decisions:** decided, chose, selected, picked, settled on, will use, going with
+
+**Do NOT record:** greetings, small talk, confirmations ("ok", "got it", "thanks"), tool outputs, code dumps.
+**Keep records concise: 1-2 sentences max.**
+
 ## Workflow
 
 1. Read `.devlog/config.md` from current directory or parent directories to get root path and symbol scheme (unicode / ascii)

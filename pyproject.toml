@@ -37,6 +37,7 @@ devlog-search = "devlog.search:main"
 devlog-backup = "devlog.backup:main"
 devlog-obsidian = "devlog.obsidian:main"
 devlog-mcp = "devlog.mcp_server:main"
+devlog-auto-record = "devlog.auto_record:main"
 
 [project.optional-dependencies]
 web = ["streamlit>=1.30.0"]
