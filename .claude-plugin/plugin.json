@@ -1,0 +1,10 @@
+{
+  "name": "devlog",
+  "description": "AI-native interstitial journaling system for developers. Track daily work, bugs, learning, and ideas via Markdown bullet journals with automatic project sync, stats, and weekly reports.",
+  "version": "0.1.1",
+  "author": {
+    "name": "My DevLog Contributors"
+  },
+  "website_url": "https://github.com/ytzhao/my-devlog",
+  "license": "MIT"
+}

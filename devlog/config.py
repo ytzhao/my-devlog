@@ -3,6 +3,8 @@ DevLog configuration management.
 Handles root directory resolution, symbol scheme, and user preferences.
 """
 
+import locale
+import logging
 import os
 import platform
 from pathlib import Path
@@ -49,6 +51,7 @@ class DevLogConfig:
         config = {
             "root_dir": str(self.root),
             "symbol_set": "unicode",
+            "language": self._detect_language(),
             "user": os.environ.get("USER", os.environ.get("USERNAME", "user")),
         }
 
@@ -66,8 +69,11 @@ class DevLogConfig:
                 elif line.startswith("- **符号方案**:") or line.startswith("- **Symbol Set**:"):
                     val = line.split(":", 1)[1].strip().split()[0]
                     config["symbol_set"] = val
-        except Exception:
-            pass
+                elif line.startswith("- **语言**:") or line.startswith("- **Language**:"):
+                    val = line.split(":", 1)[1].strip().strip("`").split()[0]
+                    config["language"] = val
+        except Exception as exc:
+            logging.error("Failed to read config from %s: %s", config_path, exc)
 
         return config
 
@@ -78,6 +84,20 @@ class DevLogConfig:
     @property
     def symbol_set(self):
         return self._config.get("symbol_set", "unicode")
+
+    @property
+    def language(self):
+        return self._config.get("language", "auto")
+
+    def _detect_language(self):
+        """Detect system language; return 'zh' or 'en'."""
+        try:
+            loc = locale.getlocale()[0] or ""
+        except Exception:
+            loc = ""
+        if loc and loc.lower().startswith("zh"):
+            return "zh"
+        return "en"
 
     @property
     def user(self):
@@ -132,6 +152,7 @@ class DevLogConfig:
 
 - **Root Directory**: `{self.root_dir}`
 - **Symbol Set**: `unicode`  # Options: unicode | ascii
+- **Language**: `{self.language}`  # Options: zh | en | auto
 - **Default Project**: None
 - **User**: `{self.user}`
 

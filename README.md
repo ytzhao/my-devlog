@@ -20,23 +20,62 @@
 - **🤖 AI-Native**: Speak to your AI assistant, it records everything. No manual file editing.
 - **⚡ Zero-Friction Logging**: One slash command (`/log-devlog`) to capture a thought in 2 seconds.
 - **📂 Auto-Organization**: AI writes to `daily/`, scripts auto-sync to `projects/` by tag.
+- **🔌 MCP Server**: Claude Code connects directly via MCP — reliable tool calls instead of shell command guessing.
+- **🔍 Full-Text Search**: Search across all logs by keyword, date range, or project tag.
+- **📊 Auto-Statistics**: Daily stats, weekly reviews, mood tracking, time tracking — all automatic.
 - **🔀 Multi-AI Support**: Works with Claude Code, Kimi Code, OpenCode — or any AI with system prompts.
-- **📊 Auto-Statistics**: Daily stats, weekly reviews — all generated automatically.
+- **📤 Backup & Export**: JSON, Markdown, or ZIP export at any time.
+- **🔗 Obsidian / Logseq**: Generate wiki-linked vaults or Logseq journals with one command.
+- **🌐 Web UI**: Optional Streamlit dashboard for browsing and visualizing your logs.
 - **💯 Local-First**: All data stays on your machine. No cloud, no vendor lock-in.
 
 ### 🚀 Quick Start
+
+#### For Claude Code (Recommended — via Plugin + MCP)
+
+```bash
+# 1. Install the Python package (provides the MCP server)
+pip install -e .
+
+# 2. In Claude Code, install the plugin
+/plugin install devlog@github-marketplace
+# Or add the local repo as a marketplace:
+/plugin marketplace add ./
+/plugin install devlog@local
+
+# 3. Done! Use slash commands directly
+/log-devlog My first DevLog entry!
+```
+
+> The plugin automatically registers the MCP server. AI calls tools directly — no shell command guessing.
+
+#### For Kimi Code
+
+```bash
+# 1. 安装 Python 包（提供 tool 运行时）
+pip install -e .
+
+# 2. 在 Kimi Code 中安装 Plugin
+kimi plugin install https://github.com/ytzhao/my-devlog.git
+
+# 3. 完成！Plugin 自动提供 Skills + Tools
+# 可以直接使用 /log-devlog 等命令，也可以自然语言调用工具
+```
+
+> Kimi Plugin 包含 **Skills**（/log-devlog 等 Slash Command）+ **Native Tools**（devlog_write_record, devlog_sync 等），AI 会自动选择最合适的方式执行。
+
+#### For OpenCode / Manual Install
 
 ```bash
 # 1. Clone the repo
 git clone https://github.com/ytzhao/my-devlog.git
 cd my-devlog
 
-# 2. Install (creates ~/.devlog/ and installs AI skills)
+# 2. Install
+pip install -e .
 python install.py
 
-# 3. Start your AI tool and log your first note
-# In Claude Code / Kimi Code / OpenCode:
-/log-devlog My first DevLog entry!
+# 3. OpenCode: config copied to ~/.opencode/
 ```
 
 ### 📋 Slash Commands
@@ -59,8 +98,8 @@ python install.py
 ```
 ~/.devlog/                          # Your DevLog root (or DEVLOG_ROOT)
 ├── .devlog/
-│   ├── config.md                   # Global config (symbols, root path)
-│   ├── templates/                  # Markdown templates
+│   ├── config.md                   # Global config (symbols, language, root path)
+│   ├── templates/                  # Markdown templates (daily.md, daily.en.md)
 │   ├── skills/                     # AI skill definitions
 │   └── scripts/
 │       └── sync.py                 # Auto-sync & statistics script
@@ -81,17 +120,49 @@ python install.py
 
 | Tool | Setup | Status |
 |------|-------|--------|
-| **Claude Code** | `~/.claude/commands/` | ✅ Ready |
-| **Kimi Code** | `~/.kimi/skills/` | ✅ Ready |
-| **OpenCode** | System prompt injection | ✅ Ready |
+| **Claude Code** | `/plugin install devlog@github-marketplace` | ✅ MCP + Plugin |
+| **Kimi Code** | `kimi plugin install` | ✅ Plugin (Skills + Tools) |
+| **OpenCode** | `~/.opencode/` | ✅ Config |
 | **Cursor / Copilot** | Custom instructions | 🔄 Adaptable |
 
-### 📖 Documentation
+### 🔌 MCP Server (Claude Code)
 
-- [Usage Manual (中文)](docs/使用手册.md)
-- [Implementation Report (中文)](docs/实施报告.md) *(for reference)*
+When the DevLog plugin is installed, Claude Code connects via **MCP (Model Context Protocol)**. The AI directly calls typed functions instead of guessing shell commands.
 
-### ⚙️ Manual Sync
+**Available MCP Tools:**
+
+| Tool | Description |
+|------|-------------|
+| `devlog_read_daily` | Read daily log for a date |
+| `devlog_write_record` | Append a record (auto-detects symbol) |
+| `devlog_sync` | Sync daily → projects + stats |
+| `devlog_archive_inbox` | Archive inbox to daily/ |
+| `devlog_generate_stats` | Regenerate daily statistics |
+| `devlog_generate_weekly` | Generate weekly report |
+| `devlog_mark_done` | Mark todo as done by keyword |
+| `devlog_list_todos` | List open todos |
+| `devlog_search` | Search by keyword/date/project |
+| `devlog_list_projects` | List all projects |
+| `devlog_get_config` | Read configuration |
+| `devlog_create_backup` | ZIP backup |
+| `devlog_export_json` | Export to JSON |
+| `devlog_export_md` | Export to single Markdown |
+
+**Available MCP Resources:**
+
+| Resource | Description |
+|----------|-------------|
+| `devlog://daily/{date}` | Daily log content |
+| `devlog://inbox` | Inbox content |
+| `devlog://config` | Configuration |
+| `devlog://projects/{project}/{date}` | Project log |
+| `devlog://weekly/{date}` | Weekly report |
+
+### ⚙️ CLI Commands (Manual / Scripts)
+
+All commands support `--root` to override the default directory.
+
+#### Core Sync
 
 ```bash
 # Default: sync today + generate stats
@@ -100,11 +171,107 @@ python -m devlog.sync
 # Archive inbox to daily/
 python -m devlog.sync --archive-inbox
 
+# Generate daily statistics table
+python -m devlog.sync --daily-stats
+
 # Generate weekly report
 python -m devlog.sync --weekly
 
-# Custom root directory
-python -m devlog.sync --root ~/my-custom-log
+# Specify date
+python -m devlog.sync --sync --date 2026-05-12
+
+# Full pipeline
+python -m devlog.sync --archive-inbox --sync --daily-stats
+```
+
+#### Todo Management
+
+```bash
+# Mark todo as done by keyword
+python -m devlog.mark_done "API"
+
+# List open todos
+python -m devlog.mark_done --list
+```
+
+#### Search
+
+```bash
+# Search by keyword
+python -m devlog.search "database"
+
+# Date range
+python -m devlog.search "bug" --from 2026-05-01 --to 2026-05-12
+
+# Filter by project
+python -m devlog.search --project MyProject
+
+# List all projects
+python -m devlog.search --list-projects
+```
+
+#### Backup & Export
+
+```bash
+# Export to JSON
+python -m devlog.backup --export-json devlog-data.json
+
+# Export to Markdown
+python -m devlog.backup --export-md devlog-all.md
+
+# ZIP backup
+python -m devlog.backup --backup devlog-backup.zip
+```
+
+#### Obsidian / Logseq
+
+```bash
+# Generate Obsidian vault
+python -m devlog.obsidian --obsidian
+
+# Generate Logseq journals
+python -m devlog.obsidian --logseq
+```
+
+#### Web UI (Optional)
+
+```bash
+pip install -e ".[web]"
+streamlit run devlog/webui.py
+```
+
+### 🔧 Advanced Features
+
+#### Time Tracking
+
+Use time ranges and DevLog calculates durations automatically:
+
+```markdown
+[09:00-10:30] · Designed database model @MyProject
+[14:00-15:15] × Debugged connection pool issue
+```
+
+#### Mood Tracking
+
+Add a mood score at the end of your daily log:
+
+```markdown
+(mood: 4/5)
+```
+
+#### Hashtags
+
+Use hashtags for custom categorization:
+
+```markdown
+[10:00] · Completed login API #priority-high #backend
+```
+
+#### Git Hook Auto-Sync
+
+```bash
+cp examples/git-hooks/post-commit .git/hooks/post-commit
+chmod +x .git/hooks/post-commit   # Linux/macOS
 ```
 
 ### 🏷️ Symbol System (Bullet Journal)
@@ -119,11 +286,37 @@ python -m devlog.sync --root ~/my-custom-log
 | `✓` | Done | Completed todos |
 | `→` | Migrated | Moved to another day |
 
-> ASCII fallback available: `*` `x` `-` `!` `[ ]` `[v]` `>>`
+> ASCII fallback: `*` `x` `-` `!` `[ ]` `[v]` `>>`
+
+### ⚙️ Configuration
+
+Edit `~/.devlog/.devlog/config.md`:
+
+```markdown
+- **Root Directory**: `~/.devlog`
+- **Symbol Set**: `unicode`     # unicode | ascii
+- **Language**: `auto`          # zh | en | auto
+```
+
+Or use the `DEVLOG_ROOT` environment variable:
+
+```bash
+# Linux / macOS
+export DEVLOG_ROOT=~/my-devlog
+
+# Windows PowerShell
+$env:DEVLOG_ROOT = "C:\Users\YourName\my-devlog"
+```
+
+### 📖 Documentation
+
+- [Usage Manual (中文)](docs/USAGE.md)
+- [CHANGELOG](CHANGELOG.md)
+- [CONTRIBUTING](CONTRIBUTING.md)
 
 ### 🤝 Contributing
 
-Issues and PRs welcome! This is a personal tool grown from daily needs — your feedback makes it better.
+Issues and PRs welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### 📄 License
 
@@ -143,23 +336,60 @@ Issues and PRs welcome! This is a personal tool grown from daily needs — your 
 - **🤖 AI 原生**：对 AI 说话就能记录，无需手动操作文件
 - **⚡ 零摩擦记录**：一条 Slash Command，2 秒 capture 一个想法
 - **📂 自动归档**：AI 只写 `daily/`，脚本自动按 `@项目名` 标签分发到 `projects/`
-- **🔀 多 AI 兼容**：支持 Claude Code、Kimi Code、OpenCode，甚至任何支持系统提示的 AI
-- **📊 自动统计**：每日统计表格、每周回顾报告，全部自动生成
+- **🔌 MCP Server**：Claude Code 通过 MCP 直连，AI 直接调用函数而非猜 shell 命令
+- **🔍 全文搜索**：支持关键词、日期范围、项目标签搜索
+- **📊 自动统计**：每日统计、周回顾、情绪追踪、工时统计，全部自动生成
+- **📤 备份导出**：随时导出 JSON / Markdown / ZIP
+- **🔗 双链笔记**：一键生成 Obsidian wiki-link 库或 Logseq 日记
+- **🌐 Web 面板**：可选 Streamlit 可视化看板
 - **💯 本地优先**：所有数据保存在本地，不上传云端，无厂商锁定
 
 ### 🚀 快速开始
+
+#### Claude Code 用户（推荐 — Plugin + MCP）
+
+```bash
+# 1. 安装 Python 包（提供 MCP Server）
+pip install -e .
+
+# 2. 在 Claude Code 中安装插件
+/plugin install devlog@github-marketplace
+# 或者添加本地仓库为 marketplace：
+/plugin marketplace add ./
+/plugin install devlog@local
+
+# 3. 完成！直接使用 Slash Command
+/log-devlog 我的第一条 DevLog 笔记！
+```
+
+> 插件自动注册 MCP Server，AI 直接调用工具函数，无需猜测 shell 命令。
+
+#### Kimi Code
+
+```bash
+# 1. 安装 Python 包（提供 tool 运行时）
+pip install -e .
+
+# 2. 在 Kimi Code 中安装 Plugin
+kimi plugin install https://github.com/ytzhao/my-devlog.git
+
+# 3. 完成！Plugin 自动提供 Skills + Tools
+```
+
+> Kimi Plugin 包含 **Skills**（/log-devlog 等 Slash Command）+ **Native Tools**（devlog_write_record, devlog_sync 等），AI 会自动选择最合适的方式执行。
+
+#### OpenCode / 手动安装
 
 ```bash
 # 1. 克隆仓库
 git clone https://github.com/ytzhao/my-devlog.git
 cd my-devlog
 
-# 2. 安装（创建 ~/.devlog/ 并安装 AI 技能）
+# 2. 安装
+pip install -e .
 python install.py
 
-# 3. 启动你的 AI 工具，记录第一条笔记
-# 在 Claude Code / Kimi Code / OpenCode 中输入：
-/log-devlog 我的第一条 DevLog 笔记！
+# 3. OpenCode: 配置已复制到 ~/.opencode/
 ```
 
 ### 📋 Slash Command 清单
@@ -182,13 +412,12 @@ python install.py
 ```
 ~/.devlog/                          # DevLog 根目录（或 DEVLOG_ROOT 环境变量）
 ├── .devlog/
-│   ├── config.md                   # 全局配置（符号方案、路径）
-│   ├── templates/                  # Markdown 模板
+│   ├── config.md                   # 全局配置（符号方案、语言、路径）
+│   ├── templates/                  # Markdown 模板（daily.md / daily.en.md）
 │   ├── skills/                     # AI 技能定义
 │   └── scripts/
 │       └── sync.py                 # 自动同步与统计脚本
-├── daily/
-│   └── 2026-05-11.md               # 每日主日志（AI 直接写入）
+├── daily/                          # 每日主日志（AI 直接写入）
 ├── projects/                       # 项目聚合视图（脚本自动生成）
 │   └── 我的项目/
 │       ├── 2026-05.md              # 按月聚合
@@ -204,17 +433,49 @@ python install.py
 
 | 工具 | 配置方式 | 状态 |
 |------|---------|------|
-| **Claude Code** | `~/.claude/commands/` | ✅ 已支持 |
-| **Kimi Code** | `~/.kimi/skills/` | ✅ 已支持 |
-| **OpenCode** | 系统提示注入 | ✅ 已支持 |
+| **Claude Code** | `/plugin install devlog@github-marketplace` | ✅ MCP + Plugin |
+| **Kimi Code** | `~/.kimi/skills/` | ✅ Skills |
+| **OpenCode** | `~/.opencode/` | ✅ Config |
 | **Cursor / Copilot** | 自定义指令 | 🔄 可适配 |
 
-### 📖 文档
+### 🔌 MCP Server（Claude Code）
 
-- [使用手册](docs/使用手册.md)
-- [实施报告](docs/实施报告.md) *(供参考)*
+安装 DevLog 插件后，Claude Code 通过 **MCP（Model Context Protocol）** 连接 DevLog。AI 直接调用类型化的函数，而不是猜测 shell 命令。
 
-### ⚙️ 手动运行同步脚本
+**MCP Tools：**
+
+| 工具 | 说明 |
+|------|------|
+| `devlog_read_daily` | 读取指定日期的 daily log |
+| `devlog_write_record` | 追加记录（自动识别符号） |
+| `devlog_sync` | 同步 daily → projects + 统计 |
+| `devlog_archive_inbox` | 归档 inbox 到 daily/ |
+| `devlog_generate_stats` | 重新生成每日统计 |
+| `devlog_generate_weekly` | 生成本周回顾 |
+| `devlog_mark_done` | 按关键词标记待办完成 |
+| `devlog_list_todos` | 列出待办 |
+| `devlog_search` | 搜索日志 |
+| `devlog_list_projects` | 列出所有项目 |
+| `devlog_get_config` | 读取配置 |
+| `devlog_create_backup` | ZIP 备份 |
+| `devlog_export_json` | 导出 JSON |
+| `devlog_export_md` | 导出 Markdown |
+
+**MCP Resources：**
+
+| 资源 | 说明 |
+|------|------|
+| `devlog://daily/{date}` | 每日日志 |
+| `devlog://inbox` | 收集箱 |
+| `devlog://config` | 配置信息 |
+| `devlog://projects/{project}/{date}` | 项目日志 |
+| `devlog://weekly/{date}` | 周回顾 |
+
+### ⚙️ 命令行工具（手动 / 脚本）
+
+所有命令都支持 `--root` 参数指定自定义目录。
+
+#### 核心同步
 
 ```bash
 # 默认：同步今日 + 生成统计
@@ -223,12 +484,111 @@ python -m devlog.sync
 # 归档收集箱到 daily/
 python -m devlog.sync --archive-inbox
 
+# 生成今日统计表格
+python -m devlog.sync --daily-stats
+
 # 生成本周回顾
 python -m devlog.sync --weekly
 
-# 指定自定义根目录
-python -m devlog.sync --root ~/my-custom-log
+# 指定日期操作
+python -m devlog.sync --sync --date 2026-05-12
+
+# 一键全量：归档 + 同步 + 统计
+python -m devlog.sync --archive-inbox --sync --daily-stats
 ```
+
+#### 待办管理
+
+```bash
+# 按关键词标记待办完成
+python -m devlog.mark_done "API"
+
+# 列出今日所有待办
+python -m devlog.mark_done --list
+```
+
+#### 搜索
+
+```bash
+# 按关键词搜索
+python -m devlog.search "数据库"
+
+# 搜索日期范围
+python -m devlog.search "bug" --from 2026-05-01 --to 2026-05-12
+
+# 按项目标签过滤
+python -m devlog.search --project MyProject
+
+# 列出所有项目及记录数
+python -m devlog.search --list-projects
+```
+
+#### 备份与导出
+
+```bash
+# 导出为 JSON
+python -m devlog.backup --export-json devlog-data.json
+
+# 导出为单个 Markdown 文件
+python -m devlog.backup --export-md devlog-all.md
+
+# 创建 ZIP 备份
+python -m devlog.backup --backup devlog-backup.zip
+```
+
+#### Obsidian / Logseq
+
+```bash
+# 生成 Obsidian vault（@项目名 转为 [[wiki-link]]）
+python -m devlog.obsidian --obsidian
+
+# 生成 Logseq journals
+python -m devlog.obsidian --logseq
+```
+
+#### Web UI（可选）
+
+```bash
+pip install -e ".[web]"
+streamlit run devlog/webui.py
+```
+
+### 🔧 进阶功能
+
+#### 时间追踪
+
+在日志中使用时间区间，DevLog 会自动计算工时：
+
+```markdown
+[09:00-10:30] · 设计数据库模型 @MyProject
+[14:00-15:15] × 调试连接池问题
+```
+
+#### 情绪追踪
+
+在每日日志末尾添加情绪评分：
+
+```markdown
+(mood: 4/5)
+```
+
+#### Hashtag 标签
+
+使用 hashtag 进行自定义分类：
+
+```markdown
+[10:00] · 完成登录接口 #priority-high #backend
+```
+
+#### Git Hook 自动同步
+
+```bash
+# 复制 hook 到项目
+cp examples/git-hooks/post-commit .git/hooks/post-commit
+chmod +x .git/hooks/post-commit   # Linux/macOS
+```
+
+每次 `git commit` 后自动触发 `devlog-sync --sync`。
 
 ### 🏷️ 符号系统（子弹笔记）
 
@@ -244,9 +604,35 @@ python -m devlog.sync --root ~/my-custom-log
 
 > 提供 ASCII 备用方案：`*` `x` `-` `!` `[ ]` `[v]` `>>`
 
+### ⚙️ 配置
+
+编辑 `~/.devlog/.devlog/config.md`：
+
+```markdown
+- **Root Directory**: `~/.devlog`
+- **Symbol Set**: `unicode`     # unicode | ascii
+- **Language**: `auto`          # zh | en | auto
+```
+
+或通过环境变量指定根目录：
+
+```bash
+# Linux / macOS
+export DEVLOG_ROOT=~/my-devlog
+
+# Windows PowerShell
+$env:DEVLOG_ROOT = "C:\Users\YourName\my-devlog"
+```
+
+### 📖 文档
+
+- [使用手册](docs/USAGE.md)
+- [CHANGELOG](CHANGELOG.md)
+- [CONTRIBUTING](CONTRIBUTING.md)
+
 ### 🤝 贡献
 
-欢迎提交 Issue 和 PR！这是一个从日常需求中生长出来的个人工具，你的反馈会让它变得更好。
+欢迎提交 Issue 和 PR！详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ### 📄 许可证
 

@@ -3,6 +3,5 @@ description: "Add a todo item to DevLog"
 model: default
 ---
 
-Read `.devlog/config.md` to get the DevLog root path and symbol scheme.
-Locate `daily/YYYY-MM-DD.md`, append with `[HH:MM] ○` (or `[HH:MM] [ ]`) format.
-Also append to `inbox.md`.
+Use the `devlog_write_record` MCP tool with `symbol` set to the configured todo symbol ("○" for unicode or "[ ]" for ascii).
+Pass the user's task description as `content`.

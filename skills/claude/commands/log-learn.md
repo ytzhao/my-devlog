@@ -1,9 +1,7 @@
 ---
-description: "Record learning notes to DevLog"
+description: "Record something you learned to DevLog"
 model: default
 ---
 
-Read `.devlog/config.md` to get the DevLog root path and symbol scheme.
-Locate `daily/YYYY-MM-DD.md`, append with `[HH:MM] -`.
-If content is long, ask if creating a separate `topics/learning/tech-name.md` is needed.
-Add `@ProjectName` tag if relevant to current work.
+Use the `devlog_write_record` MCP tool with `symbol` set to the configured learning symbol ("-").
+Pass the user's learning content as `content`.

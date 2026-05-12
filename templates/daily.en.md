@@ -24,9 +24,9 @@
 | Todo ○→✓ | 0→0 | 0% |
 <!-- STATS_TABLE_END -->
 
-## 😊 情绪追踪
+## 😊 Mood Tracker
 
-<!-- 在一天结束时添加情绪评分，例如：(mood: 4/5) -->
+<!-- Add mood at end of day: (mood: 4/5) -->
 
 ## 🔗 Related Projects
 

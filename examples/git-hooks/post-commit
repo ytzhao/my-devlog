@@ -1,0 +1,18 @@
+#!/bin/sh
+# DevLog Git Hook — Post-Commit
+#
+# Automatically sync daily devlog after each commit.
+# Install: cp examples/git-hooks/post-commit .git/hooks/post-commit && chmod +x .git/hooks/post-commit
+#
+# This ensures your devlog project logs stay in sync with your commits.
+
+# Only run if devlog sync command is available
+if command -v devlog-sync >/dev/null 2>&1; then
+    echo "[devlog] Syncing daily log to projects..."
+    devlog-sync --sync
+elif python -m devlog.sync --help >/dev/null 2>&1; then
+    echo "[devlog] Syncing daily log to projects..."
+    python -m devlog.sync --sync
+else
+    echo "[devlog] Skipping sync (devlog not installed)"
+fi

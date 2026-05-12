@@ -3,6 +3,5 @@ description: "Mark a todo as completed"
 model: default
 ---
 
-Read `.devlog/config.md` to get the DevLog root path and symbol scheme.
-Search `daily/YYYY-MM-DD.md` for the most recent todo (`○` or `[ ]`) matching the user's keyword, mark it as done (`✓` or `[v]`).
-If no match found, list today's todos for user selection.
+Use the `devlog_mark_done` MCP tool with the user's keyword as the `keyword` argument.
+If no match is found, use `devlog_list_todos` to show today's open todos for user selection.

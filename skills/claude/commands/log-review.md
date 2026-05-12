@@ -1,9 +1,8 @@
 ---
-description: "Generate DevLog daily review"
+description: "Generate today's DevLog review"
 model: default
 ---
 
-Read `.devlog/config.md` to get the DevLog root path.
-Read `daily/YYYY-MM-DD.md`, count records by type, list completed todos, unfinished todos, problems, and ideas.
-Remind user to run `sync.py --daily-stats` for auto-generated statistics.
-Ask if unfinished todos should be migrated to tomorrow.
+1. Use `devlog_read_daily` to read today's daily log.
+2. Summarize: total records, todo completion rate, problems, ideas.
+3. List any open todos remaining.

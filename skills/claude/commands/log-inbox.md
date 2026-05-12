@@ -1,8 +1,7 @@
 ---
-description: "Quick capture to DevLog inbox"
+description: "Quick dump to DevLog inbox"
 model: default
 ---
 
-Read `.devlog/config.md` to get the DevLog root path.
-Append with `[YYYY-MM-DD HH:MM] <symbol> <content>` format to `inbox.md`.
-No project question needed, sync.py will auto-distribute later.
+Use the `devlog_write_record` MCP tool to append the note to today's daily log.
+(Alternatively, write directly to the `devlog://inbox` resource.)

@@ -10,7 +10,7 @@ Usage:
     sync.sync_daily_to_projects()
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "ytzhao"
 
 from .sync import DevLogSync
