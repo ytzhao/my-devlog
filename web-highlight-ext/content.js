@@ -328,7 +328,7 @@
     const span = document.createElement('span');
     span.className = HL_CLASS;
     span.dataset.dlText = text;
-    span.title = 'Double-click to remove highlight';
+    span.title = 'Double-click or click ✕ to remove';
 
     try {
       range.surroundContents(span);
@@ -352,18 +352,118 @@
   }
 
   function attachRemoveHandler(span) {
+    // 双击删除（保留向后兼容）
     span.addEventListener('dblclick', async (e) => {
       e.stopPropagation();
       e.preventDefault();
-      const text = span.dataset.dlText;
-      await removePersistedHighlight(text);
+      hideRemoveBtn(); // 如果悬停按钮正显示，一并清理
+      await removeHighlight(span);
+    });
 
-      const parent = span.parentNode;
-      parent.insertBefore(document.createTextNode(span.textContent), span);
+    // 悬停显示删除按钮
+    let removeBtn = null;
+
+    span.addEventListener('mouseenter', () => {
+      if (removeBtn) {
+        if (removeBtn._hideTimer) clearTimeout(removeBtn._hideTimer);
+        return;
+      }
+
+      const rects = span.getClientRects();
+      if (!rects.length) return;
+
+      const firstLine = rects[0];
+      removeBtn = document.createElement('button');
+      removeBtn.className = 'dl-hl-remove-btn';
+      removeBtn.textContent = '✕';
+      removeBtn.title = 'Remove highlight';
+      removeBtn.style.cssText = `
+        position: fixed;
+        left: ${Math.min(firstLine.right + 4, window.innerWidth - 26)}px;
+        top: ${Math.max(firstLine.top - 10, 4)}px;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        margin: 0;
+        background: #ef4444;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        font-size: 11px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        line-height: 20px;
+        text-align: center;
+        cursor: pointer;
+        z-index: 2147483640;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        pointer-events: auto;
+        user-select: none;
+      `;
+      document.body.appendChild(removeBtn);
+      requestAnimationFrame(() => { if (removeBtn) removeBtn.style.opacity = '1'; });
+
+      removeBtn._hideTimer = null;
+
+      removeBtn.addEventListener('mouseenter', () => {
+        if (removeBtn && removeBtn._hideTimer) clearTimeout(removeBtn._hideTimer);
+      });
+
+      removeBtn.addEventListener('mouseleave', () => {
+        if (!removeBtn) return;
+        removeBtn._hideTimer = setTimeout(() => {
+          if (removeBtn) hideRemoveBtn();
+        }, 100);
+      });
+
+      removeBtn.addEventListener('click', async (ev) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+        const btn = removeBtn;
+        removeBtn = null;
+        if (btn && btn.parentNode) {
+          btn.style.opacity = '0';
+          setTimeout(() => btn.remove(), 150);
+        }
+        await removeHighlight(span);
+      });
+    });
+
+    const hideRemoveBtn = () => {
+      if (!removeBtn) return;
+      removeBtn.style.opacity = '0';
+      setTimeout(() => {
+        if (removeBtn && removeBtn.parentNode) removeBtn.remove();
+        removeBtn = null;
+      }, 150);
+    };
+
+    span.addEventListener('mouseleave', () => {
+      if (!removeBtn) return;
+      removeBtn._hideTimer = setTimeout(() => {
+        if (removeBtn) hideRemoveBtn();
+      }, 250);
+    });
+  }
+
+  async function removeHighlight(span) {
+    const text = span.dataset.dlText;
+    if (!text) return;
+
+    await removePersistedHighlight(text);
+
+    // Unwrap: move children before span to preserve nested structure
+    const parent = span.parentNode;
+    if (parent) {
+      while (span.firstChild) {
+        parent.insertBefore(span.firstChild, span);
+      }
       parent.removeChild(span);
       parent.normalize();
-      showToast('🗑️ Highlight removed', 'info');
-    });
+    }
+
+    showToast('🗑️ Highlight removed', 'info');
   }
 
   /* ── Persistence ── */
@@ -427,5 +527,5 @@
     initRestore();
   }
 
-  console.log('DevLog Highlighter v9 — auto-save screenshot loaded');
+  console.log('DevLog Highlighter v10 — highlight removal with hover button');
 })();
