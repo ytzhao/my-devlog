@@ -39,3 +39,5 @@ Thumbs.db
 # DevLog runtime (user data, not source)
 # Note: In production, users will have their own ~/.devlog/
 # We don't commit user data to the repo
+assets/
+daily/
