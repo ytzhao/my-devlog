@@ -363,24 +363,23 @@
     // 悬停显示删除按钮
     let removeBtn = null;
 
-    span.addEventListener('mouseenter', () => {
+    span.addEventListener('mouseenter', (e) => {
       if (removeBtn) {
         if (removeBtn._hideTimer) clearTimeout(removeBtn._hideTimer);
         return;
       }
 
-      const rects = span.getClientRects();
-      if (!rects.length) return;
-
-      const firstLine = rects[0];
+      const mx = e.clientX;
+      const my = e.clientY;
+      const BTN_SIZE = 20;
       removeBtn = document.createElement('button');
       removeBtn.className = 'dl-hl-remove-btn';
       removeBtn.textContent = '✕';
       removeBtn.title = 'Remove highlight';
       removeBtn.style.cssText = `
         position: fixed;
-        left: ${Math.min(firstLine.right + 4, window.innerWidth - 26)}px;
-        top: ${Math.max(firstLine.top - 10, 4)}px;
+        left: ${Math.max(4, Math.min(mx - BTN_SIZE / 2, window.innerWidth - BTN_SIZE - 4))}px;
+        top: ${Math.max(4, my - BTN_SIZE - 8)}px;
         width: 20px;
         height: 20px;
         padding: 0;
