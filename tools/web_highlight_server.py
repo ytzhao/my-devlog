@@ -157,7 +157,11 @@ tags: [web-highlight, {tag}]
 
         symbols = sync.symbols
         display_title = title[:50] + "…" if len(title) > 50 else title
-        line = f"[{time_str}] {symbols['learning']} Web: {display_title} @{tag}"
+        highlight_snippet = text[:60] + "…" if len(text) > 60 else text
+        if highlight_snippet:
+            line = f"[{time_str}] {symbols['learning']} Web: {display_title} — \"{highlight_snippet}\" @{tag}"
+        else:
+            line = f"[{time_str}] {symbols['learning']} Web: {display_title} @{tag}"
 
         marker = "## 🕐 Interstitial Log"
         if marker in daily_content:
@@ -171,6 +175,14 @@ tags: [web-highlight, {tag}]
             daily_content += "\n" + line + "\n"
 
         daily_path.write_text(daily_content, encoding="utf-8")
+
+        # ── 4. Auto-sync: projects + stats (no manual step needed) ──
+        try:
+            sync.sync_daily_to_projects(date_str)
+            sync.generate_daily_stats(date_str)
+            print(f"[OK] Auto-synced projects & stats for {date_str}")
+        except Exception as exc:
+            print(f"[WARN] Auto-sync failed: {exc}")
 
         print(f"[OK] {time_str} | {display_title} | screenshot={'yes' if screenshot_path else 'no'}")
         if screenshot_path:

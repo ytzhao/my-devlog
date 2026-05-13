@@ -34,99 +34,100 @@ logging.basicConfig(
 )
 
 # ── Keywords for auto-detection ──
+# (pattern, weight) — higher weight for action-oriented keywords
 PATTERNS = {
     "note": [
-        r"完成了?",
-        r"搞定",
-        r"做好",
-        r"实现了?",
-        r"写完",
-        r"提交了?",
-        r"发布了?",
-        r"部署",
-        r"上线",
-        r"合并",
-        r"修复",
-        r"优化",
-        r"重构",
-        r"测试通过",
-        r"review",
-        r"开会",
-        r"讨论了?",
-        r"确认",
-        r"验收",
+        (r"完成了?", 2),
+        (r"搞定", 2),
+        (r"做好", 2),
+        (r"实现了?", 2),
+        (r"写完", 2),
+        (r"提交了?", 2),
+        (r"发布了?", 2),
+        (r"部署", 2),
+        (r"上线", 2),
+        (r"合并", 2),
+        (r"修复", 2),
+        (r"优化", 2),
+        (r"重构", 2),
+        (r"测试通过", 2),
+        (r"review", 1),
+        (r"开会", 1),
+        (r"讨论了?", 1),
+        (r"确认", 1),
+        (r"验收", 1),
     ],
     "problem": [
-        r"报错",
-        r"错误",
-        r"bug",
-        r"异常",
-        r"失败",
-        r"卡住",
-        r"崩溃",
-        r"超时",
-        r"不?能运行",
-        r"不?能工作",
-        r"出问题了?",
-        r"有问题",
-        r"兼容",
-        r"冲突",
-        r"死锁",
-        r"内存泄漏",
+        (r"报错", 2),
+        (r"错误", 1),
+        (r"bug", 1),
+        (r"异常", 2),
+        (r"失败", 2),
+        (r"卡住", 2),
+        (r"崩溃", 2),
+        (r"超时", 2),
+        (r"不?能运行", 2),
+        (r"不?能工作", 2),
+        (r"出问题了?", 2),
+        (r"有问题", 2),
+        (r"兼容", 1),
+        (r"冲突", 2),
+        (r"死锁", 2),
+        (r"内存泄漏", 2),
     ],
     "learning": [
-        r"学到",
-        r"了解",
-        r"原来",
-        r"发现",
-        r"阅读",
-        r"看了",
-        r"查了",
-        r"调研",
-        r"学习了?",
-        r"理解了?",
-        r"才知道",
-        r"原理",
-        r"机制",
-        r"文档",
+        (r"学到", 2),
+        (r"了解", 1),
+        (r"原来", 1),
+        (r"发现", 1),
+        (r"阅读", 1),
+        (r"看了", 1),
+        (r"查了", 1),
+        (r"调研", 1),
+        (r"学习了?", 2),
+        (r"理解了?", 2),
+        (r"才知道", 2),
+        (r"原理", 1),
+        (r"机制", 1),
+        (r"文档", 1),
     ],
     "idea": [
-        r"可以",
-        r"想到",
-        r"也许",
-        r"试试",
-        r"建议",
-        r"方案",
-        r"思路",
-        r"设计",
-        r"规划",
-        r"下一步",
-        r"后续",
-        r"todo",
-        r"待办",
-        r"计划",
-        r"如果",
-        r"不如",
-        r"改成",
+        (r"可以", 1),
+        (r"想到", 2),
+        (r"也许", 1),
+        (r"试试", 1),
+        (r"建议", 1),
+        (r"方案", 1),
+        (r"思路", 1),
+        (r"设计", 1),
+        (r"规划", 1),
+        (r"下一步", 1),
+        (r"后续", 1),
+        (r"todo", 1),
+        (r"待办", 1),
+        (r"计划", 1),
+        (r"如果", 1),
+        (r"不如", 1),
+        (r"改成", 1),
     ],
     "todo": [
-        r"需要",
-        r"应该",
-        r"得",
-        r"要",
-        r"还没",
-        r"尚未",
-        r"待",
-        r"准备",
-        r"开始",
-        r"接着",
-        r"继续",
+        (r"需要", 1),
+        (r"应该", 1),
+        (r"得", 1),
+        (r"要", 1),
+        (r"还没", 2),
+        (r"尚未", 2),
+        (r"待", 1),
+        (r"准备", 1),
+        (r"开始", 1),
+        (r"接着", 1),
+        (r"继续", 1),
     ],
 }
 
 # Compile regexes
 _COMPILED = {
-    cat: [re.compile(p, re.IGNORECASE) for p in pats]
+    cat: [(re.compile(p, re.IGNORECASE), w) for p, w in pats]
     for cat, pats in PATTERNS.items()
 }
 
@@ -140,26 +141,53 @@ _EXCLUDE = [
 
 
 def _classify_content(text: str) -> str | None:
-    """Classify user message into a category or None."""
+    """Classify user message into a category or None using weighted scoring."""
     # Skip excluded patterns
     for pat in _EXCLUDE:
         if pat.search(text):
             return None
 
     # Skip too short
-    if len(text.strip()) < 8:
+    if len(text.strip()) < 5:
         return None
 
     scores = {cat: 0 for cat in _COMPILED}
     for cat, pats in _COMPILED.items():
-        for pat in pats:
+        for pat, weight in pats:
             if pat.search(text):
-                scores[cat] += 1
+                scores[cat] += weight
 
-    best = max(scores, key=scores.get)
-    if scores[best] > 0:
-        return best
-    return None
+    best_score = max(scores.values())
+    if best_score <= 0:
+        return None
+
+    # Tie-breaker priority: problem > todo > learning > idea > note
+    priority = ["problem", "todo", "learning", "idea", "note"]
+    candidates = [cat for cat, s in scores.items() if s == best_score]
+    for cat in priority:
+        if cat in candidates:
+            return cat
+    return candidates[0]
+
+
+def _extract_project_tag(text: str) -> str:
+    """Extract project tag from text, or return empty string."""
+    # Explicit @Tag
+    m = re.search(r"@(\S+)", text)
+    if m:
+        return m.group(1)
+
+    # Common project indicators
+    indicators = [
+        r"(?:项目|project)[：:]\s*([A-Za-z0-9_\-]+)",
+        r"在\s*([A-Za-z0-9_\-]+?)\s*(?:项目|里|中|上)",
+    ]
+    for pat in indicators:
+        m = re.search(pat, text, re.IGNORECASE)
+        if m:
+            return m.group(1)
+
+    return ""
 
 
 def _parse_kimi_context(path: Path) -> list[dict]:
@@ -282,10 +310,15 @@ def _merge_with_daily(records: list[dict], date_str: str, dry_run: bool = False)
     for line in existing.split("\n"):
         stripped = line.strip()
         if stripped.startswith("[") and "]" in stripped:
-            # Extract text after symbol
-            m = re.search(r"\]\s+[·×○✓→*x!\-]|\[ \]|\[v\]|>>\s+(.+)", stripped)
+            # Extract text after symbol: [HH:MM] SYMBOL CONTENT
+            m = re.search(
+                r'^\[(\d{2}:\d{2})\]\s+'
+                r'([·×○✓→*x!\-\[\]v>]+)\s+'
+                r'(.+)$',
+                stripped,
+            )
             if m:
-                existing_lines.add(m.group(1).strip()[:40].lower())
+                existing_lines.add(m.group(3).strip()[:40].lower())
 
     written = 0
     symbols = sync.symbols
@@ -312,7 +345,13 @@ def _merge_with_daily(records: list[dict], date_str: str, dry_run: bool = False)
         existing_lines.add(content_norm)
 
         symbol = cat_symbols.get(cat, symbols["note"])
-        line = f"[{time_str}] {symbol} {r['content'].strip()}"
+        content = r["content"].strip()
+
+        # Auto-extract project tag if missing
+        project_tag = _extract_project_tag(content)
+        tag_part = f" @{project_tag}" if project_tag else ""
+
+        line = f"[{time_str}] {symbol} {content}{tag_part}"
         new_lines.append(line)
         written += 1
 
@@ -341,6 +380,15 @@ def _merge_with_daily(records: list[dict], date_str: str, dry_run: bool = False)
 
     daily_path.write_text(new_content, encoding="utf-8")
     logging.info("Auto-recorded %s entries to daily/%s.md", written, date_str)
+
+    # ── Auto-sync: projects + stats + reflection ──
+    try:
+        sync.sync_daily_to_projects(date_str)
+        sync.generate_daily_stats(date_str)
+        logging.info("Auto-synced projects & stats for %s", date_str)
+    except Exception as exc:
+        logging.warning("Auto-sync failed: %s", exc)
+
     return written
 
 
@@ -388,7 +436,7 @@ def auto_record(
     records = _deduplicate(records)
     logging.info("After dedup: %s unique messages", len(records))
 
-    # Classify and merge
+    # Classify and merge (includes auto-sync)
     written = _merge_with_daily(records, date_str, dry_run=dry_run)
     if written == 0:
         logging.info("No new records to write")

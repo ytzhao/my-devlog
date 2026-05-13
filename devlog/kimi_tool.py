@@ -15,6 +15,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+from .auto_record import auto_record as _auto_record
 from .config import DevLogConfig
 from .mark_done import list_todos, mark_done as _mark_done
 from .search import search_logs
@@ -45,14 +46,15 @@ def tool_write_record(args: dict) -> str:
     symbols = sync.symbols
     symbol = args.get("symbol", "auto")
     if symbol == "auto":
-        lowered = content.lower()
-        if any(w in lowered for w in ("bug", "error", "problem", "fix", "crash")):
+        from .auto_record import _classify_content
+        cat = _classify_content(content)
+        if cat == "problem":
             symbol = symbols["problem"]
-        elif any(w in lowered for w in ("learn", "read", "study", "understand")):
+        elif cat == "learning":
             symbol = symbols["learning"]
-        elif any(w in lowered for w in ("idea", "think", "maybe", "could", "what if")):
+        elif cat == "idea":
             symbol = symbols["idea"]
-        elif any(w in lowered for w in ("todo", "need to", "should", "plan")):
+        elif cat == "todo":
             symbol = symbols["todo"]
         else:
             symbol = symbols["note"]
@@ -79,7 +81,16 @@ def tool_write_record(args: dict) -> str:
         daily_content += "\n" + line + "\n"
 
     daily_path.write_text(daily_content, encoding="utf-8")
-    return f"[OK] Recorded: {line}"
+
+    # ── Auto-sync projects & stats ──
+    try:
+        sync.sync_daily_to_projects(date)
+        sync.generate_daily_stats(date)
+        sync.generate_daily_reflection(date)
+    except Exception as exc:
+        return f"[OK] Recorded: {line}\n[WARN] Auto-sync failed: {exc}"
+
+    return f"[OK] Recorded: {line} | synced"
 
 
 def tool_sync(args: dict) -> str:
@@ -162,6 +173,31 @@ def tool_generate_weekly(args: dict) -> str:
     return f"[OK] Weekly report generated for week starting {ws}."
 
 
+def tool_review(args: dict) -> str:
+    """Generate daily reflection for today's log."""
+    sync = DevLogSync()
+    date = args.get("date", datetime.now().strftime("%Y-%m-%d"))
+    try:
+        sync.generate_daily_reflection(date)
+        return f"[OK] Generated reflection for daily/{date}.md"
+    except Exception as exc:
+        return f"[ERROR] Failed to generate reflection: {exc}"
+
+
+def tool_auto_record(args: dict) -> str:
+    """Run auto-record to analyze latest AI session."""
+    source = args.get("source", "kimi")
+    date = args.get("date", datetime.now().strftime("%Y-%m-%d"))
+    dry_run = args.get("dry_run", False)
+    try:
+        count = _auto_record(source=source, date_str=date, dry_run=dry_run)
+        if dry_run:
+            return f"[OK] Dry-run: would record {count} entries"
+        return f"[OK] Auto-recorded {count} entries from {source} session"
+    except Exception as exc:
+        return f"[ERROR] Auto-record failed: {exc}"
+
+
 TOOLS = {
     "write_record": tool_write_record,
     "sync": tool_sync,
@@ -171,6 +207,8 @@ TOOLS = {
     "read_daily": tool_read_daily,
     "archive_inbox": tool_archive_inbox,
     "generate_weekly": tool_generate_weekly,
+    "review": tool_review,
+    "auto_record": tool_auto_record,
 }
 
 

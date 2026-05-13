@@ -8,7 +8,9 @@
 
 ## 🧠 Reflections
 
-<!-- Optional: filled during daily review -->
+<!-- AI generates reflection here -->
+<!-- REFLECTION_START -->
+<!-- REFLECTION_END -->
 
 ## 📊 Daily Stats
 
