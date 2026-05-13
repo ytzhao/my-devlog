@@ -22,6 +22,15 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from urllib.parse import unquote
 
+# Fix Windows console encoding for emoji output
+if sys.platform == "win32":
+    try:
+        import io
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
+    except Exception:
+        pass
+
 # Resolve devlog package from project root
 PROJECT_ROOT = Path(__file__).parent.parent.resolve()
 if str(PROJECT_ROOT) not in sys.path:
@@ -40,7 +49,7 @@ if not os.environ.get("DEVLOG_ROOT"):
             os.environ["DEVLOG_ROOT"] = str(parent)
             break
 
-ROOT = DevLogConfig().root_dir
+ROOT = PROJECT_ROOT
 
 
 def slugify(text: str, max_len: 40) -> str:
@@ -142,7 +151,7 @@ tags: [web-highlight, {tag}]
         md_path.write_text(md_content, encoding="utf-8")
 
         # ── 3. Append to daily log ──
-        sync = DevLogSync()
+        sync = DevLogSync(root_dir=ROOT)
         daily_path = sync._ensure_daily(date_str)
         daily_content = daily_path.read_text(encoding="utf-8")
 
