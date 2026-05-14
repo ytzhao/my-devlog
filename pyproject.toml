@@ -42,6 +42,9 @@ devlog-auto-record = "devlog.auto_record:main"
 [project.optional-dependencies]
 web = ["streamlit>=1.30.0"]
 
+[tool.hatch.build.targets.wheel]
+packages = ["devlog"]
+
 [project.urls]
 Homepage = "https://github.com/yourusername/my-devlog"
 Repository = "https://github.com/yourusername/my-devlog"

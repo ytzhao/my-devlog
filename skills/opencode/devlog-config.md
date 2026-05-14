@@ -12,16 +12,16 @@ Add the following to OpenCode's system prompt or project configuration:
 This project uses DevLog to record development logs.
 
 When the user inputs the following commands, execute the corresponding actions directly:
-- /log-devlog <content> → Record to daily/YYYY-MM-DD.md
-- /log-todo <content> → Add todo
-- /log-done <keyword> → Mark todo complete
-- /log-bug <description> → Record problem
-- /log-learn <content> → Record learning
-- /log-idea <content> → Record idea
-- /log-inbox <content> → Write to inbox.md
-- /log-review → Generate daily review
-- /log-sync → Execute python -m devlog.sync
-- /log-weekly → Generate weekly review
+- /my-devlog <content> → Record to daily/YYYY-MM-DD.md
+- /my-devlog-todo <content> → Add todo
+- /my-devlog-done <keyword> → Mark todo complete
+- /my-devlog-bug <description> → Record problem
+- /my-devlog-learn <content> → Record learning
+- /my-devlog-idea <content> → Record idea
+- /my-devlog-inbox <content> → Write to inbox.md
+- /my-devlog-review → Generate daily review
+- /my-devlog-sync → Execute python -m devlog.sync
+- /my-devlog-weekly → Generate weekly review
 
 Rules:
 1. Read .devlog/config.md from current directory or parents to get configuration

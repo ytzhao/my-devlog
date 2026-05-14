@@ -50,7 +50,7 @@ def init_devlog(root_dir=None, install_skills=True):
     print(f"\nNext steps:")
     print("  1. Set DEVLOG_ROOT environment variable (optional):")
     print(f"     export DEVLOG_ROOT={root}")
-    print("  2. Start your AI tool and use /log-devlog to record your first note")
+    print("  2. Start your AI tool and use /my-devlog to record your first note")
     print("  3. Run sync.py to generate project logs and statistics")
 
 

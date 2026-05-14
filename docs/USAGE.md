@@ -40,7 +40,7 @@ python install.py --root ~/Documents/MyDevLog
 在任何目录启动你的 AI 工具，输入：
 
 ```
-/log-devlog 测试一下 DevLog 系统是否正常工作
+/my-devlog 测试一下 DevLog 系统是否正常工作
 ```
 
 如果 AI 回复"已记录..."，说明系统就绪。
@@ -91,16 +91,16 @@ python install.py --root ~/Documents/MyDevLog
 
 | 命令 | 示例 | 效果 |
 |------|------|------|
-| `/log-devlog <内容>` | `/log-devlog 完成了登录页面设计` | 记录一条笔记，`·` |
-| `/log-todo <内容>` | `/log-todo 写 API 文档` | 添加待办，`○` |
-| `/log-done <关键词>` | `/log-done API` | 标记待办完成，`○→✓` |
-| `/log-bug <描述>` | `/log-bug 数据库连接超时` | 记录踩坑，`×` |
-| `/log-learn <内容>` | `/log-learn 了解了 JWT 刷新令牌机制` | 记录学习，`-` |
-| `/log-idea <内容>` | `/log-idea 给系统加一个暗黑模式切换` | 记录灵感，`!` |
-| `/log-inbox <内容>` | `/log-inbox 记得下周Review代码` | 丢入收集箱 |
-| `/log-review` | `/log-review` | 生成今日回顾 |
-| `/log-sync` | `/log-sync` | 手动触发同步脚本 |
-| `/log-weekly` | `/log-weekly` | 生成本周回顾 |
+| `/my-devlog <内容>` | `/my-devlog 完成了登录页面设计` | 记录一条笔记，`·` |
+| `/my-devlog-todo <内容>` | `/my-devlog-todo 写 API 文档` | 添加待办，`○` |
+| `/my-devlog-done <关键词>` | `/my-devlog-done API` | 标记待办完成，`○→✓` |
+| `/my-devlog-bug <描述>` | `/my-devlog-bug 数据库连接超时` | 记录踩坑，`×` |
+| `/my-devlog-learn <内容>` | `/my-devlog-learn 了解了 JWT 刷新令牌机制` | 记录学习，`-` |
+| `/my-devlog-idea <内容>` | `/my-devlog-idea 给系统加一个暗黑模式切换` | 记录灵感，`!` |
+| `/my-devlog-inbox <内容>` | `/my-devlog-inbox 记得下周Review代码` | 丢入收集箱 |
+| `/my-devlog-review` | `/my-devlog-review` | 生成今日回顾 |
+| `/my-devlog-sync` | `/my-devlog-sync` | 手动触发同步脚本 |
+| `/my-devlog-weekly` | `/my-devlog-weekly` | 生成本周回顾 |
 
 ---
 
@@ -110,47 +110,47 @@ python install.py --root ~/Documents/MyDevLog
 
 ```
 [开始一个新任务]
-你: /log-devlog 开始设计数据库模型
+你: /my-devlog 开始设计数据库模型
 AI: 已记录 → [10:00] · 开始设计数据库模型
 
 [遇到问题]
-你: /log-bug 外键约束导致插入失败
+你: /my-devlog-bug 外键约束导致插入失败
 AI: 已记录 → [11:30] × 外键约束导致插入失败
      解决方案？
 你: 先插父表再插子表
 AI: 已追加 → 解决：先插父表再插子表
 
 [学到一招]
-你: /log-learn SQLAlchemy 的 relationship 可以自动处理级联
+你: /my-devlog-learn SQLAlchemy 的 relationship 可以自动处理级联
 AI: 已记录 → [14:00] - SQLAlchemy 的 relationship 可以自动处理级联
 
 [完成任务]
-你: /log-done 数据库模型
+你: /my-devlog-done 数据库模型
 AI: 已标记 → [16:00] ✓ 设计数据库模型
 
 [突发灵感]
-你: /log-idea 可以用 Redis 缓存用户权限，减少数据库查询
+你: /my-devlog-idea 可以用 Redis 缓存用户权限，减少数据库查询
 AI: 已记录 → [16:30] ! 可以用 Redis 缓存用户权限
 ```
 
 ### 5.2 下班前（回顾与同步）
 
 ```
-你: /log-review
+你: /my-devlog-review
 AI: 【今日回顾】2026-05-11
     记录数: 5 | 待办完成: 1/1 | 问题: 1 | 灵感: 1
     ✓ 今日完成: 设计数据库模型
     × 今日踩坑: 外键约束导致插入失败
     ! 灵感待评估: 可以用 Redis 缓存用户权限
 
-你: /log-sync
+你: /my-devlog-sync
 AI: 已执行 sync.py，项目日志已同步到 projects/MyProject/
 ```
 
 ### 5.3 周五（周回顾）
 
 ```
-你: /log-weekly
+你: /my-devlog-weekly
 AI: 已生成周回顾 daily/weekly-2026-05-04.md
     本周共记录 28 条，投入最多项目: @MyProject (18条)
     踩坑 3 处，学习 5 项，灵感 2 个
@@ -164,7 +164,7 @@ AI: 已生成周回顾 daily/weekly-2026-05-04.md
 
 **前提**：运行 `install.py` 时已自动安装到 `~/.claude/commands/`
 
-**使用**：直接输入 `/log-devlog`、`/log-todo` 等命令
+**使用**：直接输入 `/my-devlog`、`/my-devlog-todo` 等命令
 
 **进阶**：
 - 命令文件位于 `~/.claude/commands/*.md`，可自行修改
@@ -174,7 +174,7 @@ AI: 已生成周回顾 daily/weekly-2026-05-04.md
 
 **前提**：运行 `install.py` 时已自动安装到 `~/.kimi/skills/`
 
-**使用**：直接输入 `/log-devlog`、`/log-todo` 等命令
+**使用**：直接输入 `/my-devlog`、`/my-devlog-todo` 等命令
 
 **进阶**：
 - 技能文件位于 `~/.kimi/skills/devlog-*.md`
@@ -183,7 +183,7 @@ AI: 已生成周回顾 daily/weekly-2026-05-04.md
 
 **前提**：运行 `install.py` 时已自动安装到 `~/.opencode/`
 
-**使用**：直接输入 `/log-devlog`、`/log-todo` 等命令
+**使用**：直接输入 `/my-devlog`、`/my-devlog-todo` 等命令
 
 **进阶**：
 - OpenCode 通过系统提示注入识别命令
@@ -193,7 +193,7 @@ AI: 已生成周回顾 daily/weekly-2026-05-04.md
 
 ## 7. sync.py 手动维护操作
 
-虽然 AI 可以执行 `/log-sync`，你也可以手动运行脚本：
+虽然 AI 可以执行 `/my-devlog-sync`，你也可以手动运行脚本：
 
 ### 7.1 常用命令
 
@@ -269,10 +269,10 @@ chcp 65001
 
 **A**：整个 `~/.devlog/` 目录是纯文本 Markdown 文件，直接复制到新机即可。修改 `~/.devlog/.devlog/config.md` 中的根目录路径后同步脚本自动适配。
 
-### Q2：AI 没有识别我的 `/log-devlog` 命令？
+### Q2：AI 没有识别我的 `/my-devlog` 命令？
 
 **A**：检查以下配置是否存在：
-- Claude Code: `~/.claude/commands/log-devlog.md`
+- Claude Code: `~/.claude/commands/my-devlog.md`
 - Kimi Code: `~/.kimi/skills/devlog-log-today.md`
 - 重新运行 `python install.py` 可修复
 
@@ -284,7 +284,7 @@ chcp 65001
 
 **A**：以下方式均可触发归档：
 - 运行 `python -m devlog.sync --archive-inbox`
-- 让 AI 执行 `/log-sync`（默认行为包含归档）
+- 让 AI 执行 `/my-devlog-sync`（默认行为包含归档）
 - 配置 Git Hook 在每次 commit 后自动触发
 
 ### Q5：项目日志和 daily 日志内容重复吗？
@@ -301,9 +301,9 @@ chcp 65001
 
 1. **状态切换时记录**：开始一件事、结束一件事、被打断、恢复工作时，都是记录的最佳时机
 2. **一句话原则**：每条记录控制在 1~2 句话，不要太长
-3. **善用 /log-inbox**：临时想法先丢入 inbox，晚上统一归档，不打断当前工作流
-4. **每天下班前 /log-review**：养成回顾习惯，及时发现未完成的待办
-5. **每周五 /log-weekly**：周期性复盘，沉淀经验教训
+3. **善用 /my-devlog-inbox**：临时想法先丢入 inbox，晚上统一归档，不打断当前工作流
+4. **每天下班前 /my-devlog-review**：养成回顾习惯，及时发现未完成的待办
+5. **每周五 /my-devlog-weekly**：周期性复盘，沉淀经验教训
 
 ---
 

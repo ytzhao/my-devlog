@@ -18,7 +18,7 @@
 ### ✨ Features
 
 - **🤖 AI-Native**: Speak to your AI assistant, it records everything. No manual file editing.
-- **⚡ Zero-Friction Logging**: One slash command (`/log-devlog`) to capture a thought in 2 seconds. Or let AI auto-record during conversation.
+- **⚡ Zero-Friction Logging**: One slash command (`/my-devlog`) to capture a thought in 2 seconds. Or let AI auto-record during conversation.
 - **📂 Auto-Organization**: AI writes to `daily/`, scripts auto-sync to `projects/` by tag.
 - **🔌 MCP Server**: Claude Code connects directly via MCP — reliable tool calls instead of shell command guessing.
 - **🔍 Full-Text Search**: Search across all logs by keyword, date range, or project tag.
@@ -46,7 +46,7 @@ pip install -e .
 /plugin install devlog@local
 
 # 3. Done! Use slash commands directly
-/log-devlog My first DevLog entry!
+/my-devlog My first DevLog entry!
 ```
 
 > The plugin automatically registers the MCP server. AI calls tools directly — no shell command guessing.
@@ -61,10 +61,10 @@ pip install -e .
 kimi plugin install https://github.com/ytzhao/my-devlog.git
 
 # 3. 完成！Plugin 自动提供 Skills + Tools
-# 可以直接使用 /log-devlog 等命令，也可以自然语言调用工具
+# 可以直接使用 /my-devlog 等命令，也可以自然语言调用工具
 ```
 
-> Kimi Plugin 包含 **Skills**（/log-devlog 等 Slash Command）+ **Native Tools**（devlog_write_record, devlog_sync 等），AI 会自动选择最合适的方式执行。
+> Kimi Plugin 包含 **Skills**（/my-devlog 等 Slash Command）+ **Native Tools**（devlog_write_record, devlog_sync 等），AI 会自动选择最合适的方式执行。
 
 #### For OpenCode / Manual Install
 
@@ -84,16 +84,16 @@ python install.py
 
 | Command | What it does |
 |---------|-------------|
-| `/log-devlog <note>` | Record an interstitial note |
-| `/log-todo <task>` | Add a todo item |
-| `/log-done <keyword>` | Mark a todo as completed |
-| `/log-bug <description>` | Record a bug or problem |
-| `/log-learn <content>` | Record something you learned |
-| `/log-idea <content>` | Capture an idea or inspiration |
-| `/log-inbox <content>` | Quick dump to inbox (archive later) |
-| `/log-review` | Generate today's review |
-| `/log-sync` | Manually trigger sync script |
-| `/log-weekly` | Generate weekly review |
+| `/my-devlog <note>` | Record an interstitial note |
+| `/my-devlog-todo <task>` | Add a todo item |
+| `/my-devlog-done <keyword>` | Mark a todo as completed |
+| `/my-devlog-bug <description>` | Record a bug or problem |
+| `/my-devlog-learn <content>` | Record something you learned |
+| `/my-devlog-idea <content>` | Capture an idea or inspiration |
+| `/my-devlog-inbox <content>` | Quick dump to inbox (archive later) |
+| `/my-devlog-review` | Generate today's review |
+| `/my-devlog-sync` | Manually trigger sync script |
+| `/my-devlog-weekly` | Generate weekly review |
 
 ### 🗂️ Directory Structure
 
@@ -246,7 +246,7 @@ streamlit run devlog/webui.py
 
 #### Auto-Recording
 
-DevLog can automatically capture valuable content from your AI conversations without explicit `/log-devlog` commands.
+DevLog can automatically capture valuable content from your AI conversations without explicit `/my-devlog` commands.
 
 **How it works:**
 - AI detects when you describe work progress, problems, learning, ideas, or decisions
@@ -373,7 +373,7 @@ Issues and PRs welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### DevLog 是什么？
 
-**DevLog** 是一套面向 AI 编程助手用户的 Markdown 子弹笔记系统。通过与 Claude Code、Kimi Code、OpenCode 等 AI 工具集成，你只需要用 Slash Command（如 `/log-devlog`）说话，AI 就会自动帮你记录、整理、归档每天的开发日志。
+**DevLog** 是一套面向 AI 编程助手用户的 Markdown 子弹笔记系统。通过与 Claude Code、Kimi Code、OpenCode 等 AI 工具集成，你只需要用 Slash Command（如 `/my-devlog`）说话，AI 就会自动帮你记录、整理、归档每天的开发日志。
 
 ### ✨ 核心特性
 
@@ -405,7 +405,7 @@ pip install -e .
 /plugin install devlog@local
 
 # 3. 完成！直接使用 Slash Command
-/log-devlog 我的第一条 DevLog 笔记！
+/my-devlog 我的第一条 DevLog 笔记！
 ```
 
 > 插件自动注册 MCP Server，AI 直接调用工具函数，无需猜测 shell 命令。
@@ -422,7 +422,7 @@ kimi plugin install https://github.com/ytzhao/my-devlog.git
 # 3. 完成！Plugin 自动提供 Skills + Tools
 ```
 
-> Kimi Plugin 包含 **Skills**（/log-devlog 等 Slash Command）+ **Native Tools**（devlog_write_record, devlog_sync 等），AI 会自动选择最合适的方式执行。
+> Kimi Plugin 包含 **Skills**（/my-devlog 等 Slash Command）+ **Native Tools**（devlog_write_record, devlog_sync 等），AI 会自动选择最合适的方式执行。
 
 #### OpenCode / 手动安装
 
@@ -442,16 +442,16 @@ python install.py
 
 | 命令 | 功能 |
 |------|------|
-| `/log-devlog <内容>` | 记录间歇性笔记 |
-| `/log-todo <内容>` | 添加待办 |
-| `/log-done <关键词>` | 标记待办完成 |
-| `/log-bug <描述>` | 记录踩坑 |
-| `/log-learn <内容>` | 记录学习 |
-| `/log-idea <内容>` | 记录灵感 |
-| `/log-inbox <内容>` | 快速丢入收集箱 |
-| `/log-review` | 今日回顾 |
-| `/log-sync` | 手动同步 |
-| `/log-weekly` | 周回顾 |
+| `/my-devlog <内容>` | 记录间歇性笔记 |
+| `/my-devlog-todo <内容>` | 添加待办 |
+| `/my-devlog-done <关键词>` | 标记待办完成 |
+| `/my-devlog-bug <描述>` | 记录踩坑 |
+| `/my-devlog-learn <内容>` | 记录学习 |
+| `/my-devlog-idea <内容>` | 记录灵感 |
+| `/my-devlog-inbox <内容>` | 快速丢入收集箱 |
+| `/my-devlog-review` | 今日回顾 |
+| `/my-devlog-sync` | 手动同步 |
+| `/my-devlog-weekly` | 周回顾 |
 
 ### 🗂️ 目录结构
 
@@ -603,7 +603,7 @@ streamlit run devlog/webui.py
 
 #### 自动记录
 
-DevLog 可以在你使用 AI 工具对话时，自动识别有价值的内容并记录，无需显式输入 `/log-devlog`。
+DevLog 可以在你使用 AI 工具对话时，自动识别有价值的内容并记录，无需显式输入 `/my-devlog`。
 
 **工作原理：**
 - AI 检测到你描述工作进展、问题、学习、想法或决策时

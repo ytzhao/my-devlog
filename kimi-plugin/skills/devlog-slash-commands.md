@@ -4,16 +4,16 @@
 
 | Command | Function |
 |---------|----------|
-| `/log-devlog <content>` | Record interstitial note |
-| `/log-todo <content>` | Add todo item |
-| `/log-done <keyword>` | Mark todo as completed |
-| `/log-bug <description>` | Record bug/problem |
-| `/log-learn <content>` | Record learning notes |
-| `/log-idea <content>` | Record idea/inspiration |
-| `/log-inbox <content>` | Quick capture to inbox |
-| `/log-review` | Generate daily review |
-| `/log-sync` | Manual sync trigger |
-| `/log-weekly` | Generate weekly review |
+| `/my-devlog <content>` | Record interstitial note |
+| `/my-devlog-todo <content>` | Add todo item |
+| `/my-devlog-done <keyword>` | Mark todo as completed |
+| `/my-devlog-bug <description>` | Record bug/problem |
+| `/my-devlog-learn <content>` | Record learning notes |
+| `/my-devlog-idea <content>` | Record idea/inspiration |
+| `/my-devlog-inbox <content>` | Quick capture to inbox |
+| `/my-devlog-review` | Generate daily review |
+| `/my-devlog-sync` | Manual sync trigger |
+| `/my-devlog-weekly` | Generate weekly review |
 
 ## Configuration Paths
 

@@ -27,7 +27,7 @@ python -c "from devlog.sync import DevLogSync; print('OK')"
 
 ## 测试 1：基础记录（kimi_tool write_record）
 
-**目的**：验证 `/log-devlog` 等命令的底层工具是否正常工作。
+**目的**：验证 `/my-devlog` 等命令的底层工具是否正常工作。
 
 ```powershell
 # 记录一条普通笔记
