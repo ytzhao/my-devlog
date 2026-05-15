@@ -3,18 +3,18 @@
 DevLog Sync Script
 
 Features:
-1. Read config from ~/.devlog/config.md (or DEVLOG_ROOT env var)
+1. Read config from ~/.my-devlog/config.md (or DEVLOG_ROOT env var)
 2. Scan daily/ logs, extract @ProjectName tags, generate projects/
 3. Archive inbox.md to daily/ (auto-distribute by timestamp)
 4. Generate daily statistics table
 5. Generate weekly report
 
 Usage:
-    python -m devlog.sync                    # Default: sync today + generate stats
-    python -m devlog.sync --sync             # Sync daily to projects
-    python -m devlog.sync --archive-inbox    # Archive inbox.md
-    python -m devlog.sync --daily-stats      # Generate statistics
-    python -m devlog.sync --weekly           # Generate weekly report
+    python -m my_devlog.sync                    # Default: sync today + generate stats
+    python -m my_devlog.sync --sync             # Sync daily to projects
+    python -m my_devlog.sync --archive-inbox    # Archive inbox.md
+    python -m my_devlog.sync --daily-stats      # Generate statistics
+    python -m my_devlog.sync --weekly           # Generate weekly report
 """
 
 import argparse
@@ -53,7 +53,7 @@ class DevLogSync:
             lang = self.config._detect_language()
 
         template_name = "daily.md" if lang == "zh" else "daily.en.md"
-        template = self.root / ".devlog" / "templates" / template_name
+        template = self.root / self.config.DEFAULT_DIR_NAME / "templates" / template_name
 
         weekday_map = {
             "Mon": "周一", "Tue": "周二", "Wed": "周三",

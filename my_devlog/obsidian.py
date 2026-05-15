@@ -5,7 +5,7 @@ DevLog Obsidian / Logseq Adapter
 Generates Obsidian-compatible daily notes with wiki-links and Logseq-compatible blocks.
 
 Usage:
-    python -m devlog.obsidian [--root PATH] [--output-dir PATH]
+    python -m my_devlog.obsidian [--root PATH] [--output-dir PATH]
 """
 
 import argparse

@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "devlog": {
+    "my-devlog": {
       "command": "python",
-      "args": ["-m", "devlog.mcp_server"]
+      "args": ["-m", "my_devlog.mcp_server"]
     }
   }
 }

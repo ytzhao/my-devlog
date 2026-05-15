@@ -5,8 +5,8 @@ DevLog Search
 Search across daily logs by keyword, date range, or project tag.
 
 Usage:
-    python -m devlog.search <keyword> [--date YYYY-MM-DD] [--from DATE] [--to DATE] [--project NAME]
-    python -m devlog.search --list-projects
+    python -m my_devlog.search <keyword> [--date YYYY-MM-DD] [--from DATE] [--to DATE] [--project NAME]
+    python -m my_devlog.search --list-projects
 """
 
 import argparse

@@ -1,14 +1,14 @@
-"""Tests for devlog.mark_done."""
+"""Tests for my_devlog.mark_done."""
 
 import pytest
 from pathlib import Path
 
-from devlog.mark_done import mark_done, list_todos
+from my_devlog.mark_done import mark_done, list_todos
 
 
 @pytest.fixture
 def tmp_devlog(tmp_path):
-    cfg_dir = tmp_path / ".devlog"
+    cfg_dir = tmp_path / ".my-devlog"
     cfg_dir.mkdir()
     (cfg_dir / "config.md").write_text(f"- **Root**: {tmp_path}\n", encoding="utf-8")
     (tmp_path / "daily").mkdir()

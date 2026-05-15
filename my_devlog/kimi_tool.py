@@ -6,7 +6,7 @@ Lightweight wrapper for Kimi Code native tool calls.
 Reads JSON arguments from stdin, executes the requested operation, prints result to stdout.
 
 Usage (called by Kimi Code plugin system):
-    echo '{"content": "My note", "project_tag": "MyProject"}' | python -m devlog.kimi_tool write_record
+    echo '{"content": "My note", "project_tag": "MyProject"}' | python -m my_devlog.kimi_tool write_record
 """
 
 import json

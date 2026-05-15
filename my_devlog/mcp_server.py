@@ -8,7 +8,7 @@ Connects Claude Code (and any MCP client) directly to your DevLog system.
 Usage:
     # Claude Code auto-detects via .mcp.json
     # Or run manually:
-    python -m devlog.mcp_server
+    python -m my_devlog.mcp_server
 
 Configuration:
     Set DEVLOG_ROOT env var to override the default root directory.
@@ -30,7 +30,7 @@ from .sync import DevLogSync
 
 # ── Initialize FastMCP ──
 mcp = FastMCP(
-    "devlog",
+    "my-devlog",
     instructions=(
         "DevLog MCP Server — AI-native interstitial journaling system.\n"
         "Provides tools to read/write daily logs, sync to projects, "
@@ -269,6 +269,23 @@ def devlog_get_config() -> str:
         f"Symbol Set: {cfg.symbol_set}\n"
         f"Language: {cfg.language}\n"
         f"Symbols: {symbols}"
+    )
+
+
+@mcp.tool(
+    name="devlog_todo_stats",
+    description="Compute todo statistics: done today, new today, total open across recent days. Format: 🥔[x/y/n]",
+)
+def devlog_todo_stats(date: str = "", scan_days: int = 30) -> str:
+    """Return todo stats summary."""
+    from .todo_stats import compute_todo_stats
+    stats = compute_todo_stats(
+        date_str=date or None,
+        scan_days=scan_days,
+    )
+    return (
+        f"🥔[{stats.done_today}/{stats.new_today}/{stats.total_open}]\n"
+        f"Done today: {stats.done_today} | New today: {stats.new_today} | Total open: {stats.total_open}"
     )
 
 

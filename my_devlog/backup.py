@@ -3,9 +3,9 @@
 DevLog Backup & Export
 
 Usage:
-    python -m devlog.backup --export-json          # Export all logs to JSON
-    python -m devlog.backup --export-md OUTPUT.md  # Export to single Markdown
-    python -m devlog.backup --backup ARCHIVE.zip   # Create ZIP backup
+    python -m my_devlog.backup --export-json          # Export all logs to JSON
+    python -m my_devlog.backup --export-md OUTPUT.md  # Export to single Markdown
+    python -m my_devlog.backup --backup ARCHIVE.zip   # Create ZIP backup
 """
 
 import argparse

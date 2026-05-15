@@ -5,8 +5,8 @@ DevLog Mark Done Script
 Mark a todo item as done by keyword search.
 
 Usage:
-    python -m devlog.mark_done <keyword> [--date YYYY-MM-DD] [--root PATH]
-    python -m devlog.mark_done --list [--date YYYY-MM-DD] [--root PATH]
+    python -m my_devlog.mark_done <keyword> [--date YYYY-MM-DD] [--root PATH]
+    python -m my_devlog.mark_done --list [--date YYYY-MM-DD] [--root PATH]
 """
 
 import argparse

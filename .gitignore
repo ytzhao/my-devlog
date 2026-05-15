@@ -42,3 +42,7 @@ Thumbs.db
 assets/
 daily/
 projects/
+inbox.md
+
+# Claude Code local settings
+.claude/

@@ -36,8 +36,8 @@ PROJECT_ROOT = Path(__file__).parent.parent.resolve()
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from devlog.config import DevLogConfig
-from devlog.sync import DevLogSync
+from my_devlog.config import DevLogConfig
+from my_devlog.sync import DevLogSync
 
 PORT = 3721
 

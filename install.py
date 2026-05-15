@@ -14,13 +14,13 @@ from pathlib import Path
 # Add package to path for installation
 sys.path.insert(0, str(Path(__file__).parent))
 
-from devlog.init import init_devlog
+from my_devlog.init import init_devlog
 
 
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="DevLog Installer")
-    parser.add_argument("--root", help="DevLog root directory (default: ~/.devlog/)")
+    parser.add_argument("--root", help="DevLog root directory (default: ~/.my-devlog/)")
     parser.add_argument("--no-skills", action="store_true",
                         help="Skip installing AI skill files")
     args = parser.parse_args()

@@ -1,18 +1,18 @@
-"""Tests for devlog.sync core logic."""
+"""Tests for my_devlog.sync core logic."""
 
 import pytest
 import tempfile
 from pathlib import Path
 from datetime import datetime
 
-from devlog.config import DevLogConfig
-from devlog.sync import DevLogSync
+from my_devlog.config import DevLogConfig
+from my_devlog.sync import DevLogSync
 
 
 @pytest.fixture
 def tmp_devlog(tmp_path):
     """Create a temporary DevLog directory structure."""
-    cfg_dir = tmp_path / ".devlog"
+    cfg_dir = tmp_path / ".my-devlog"
     cfg_dir.mkdir()
     (cfg_dir / "config.md").write_text(f"- **Root**: {tmp_path}\n", encoding="utf-8")
     (cfg_dir / "templates").mkdir()

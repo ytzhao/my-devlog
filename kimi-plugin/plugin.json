@@ -1,5 +1,5 @@
 {
-  "name": "devlog",
+  "name": "my-devlog",
   "description": "AI-native interstitial journaling system for developers. Track daily work, bugs, learning, and ideas via Markdown bullet journals.",
   "version": "0.1.1",
   "author": {
@@ -9,44 +9,44 @@
   "license": "MIT",
   "tools": [
     {
-      "name": "devlog_write_record",
+      "name": "my-devlog_write_record",
       "description": "Append a record to today's DevLog daily log. Auto-detects symbol from content keywords.",
-      "command": ["python", "-m", "devlog.kimi_tool", "write_record"]
+      "command": ["python", "-m", "my_devlog.kimi_tool", "write_record"]
     },
     {
-      "name": "devlog_sync",
+      "name": "my-devlog_sync",
       "description": "Sync today's daily log to projects/ and regenerate statistics.",
-      "command": ["python", "-m", "devlog.kimi_tool", "sync"]
+      "command": ["python", "-m", "my_devlog.kimi_tool", "sync"]
     },
     {
-      "name": "devlog_mark_done",
+      "name": "my-devlog_mark_done",
       "description": "Mark a todo as done by keyword search in today's daily log.",
-      "command": ["python", "-m", "devlog.kimi_tool", "mark_done"]
+      "command": ["python", "-m", "my_devlog.kimi_tool", "mark_done"]
     },
     {
-      "name": "devlog_list_todos",
+      "name": "my-devlog_list_todos",
       "description": "List all open (unfinished) todos for today.",
-      "command": ["python", "-m", "devlog.kimi_tool", "list_todos"]
+      "command": ["python", "-m", "my_devlog.kimi_tool", "list_todos"]
     },
     {
-      "name": "devlog_search",
+      "name": "my-devlog_search",
       "description": "Search daily logs by keyword, date range, or project tag.",
-      "command": ["python", "-m", "devlog.kimi_tool", "search"]
+      "command": ["python", "-m", "my_devlog.kimi_tool", "search"]
     },
     {
-      "name": "devlog_read_daily",
+      "name": "my-devlog_read_daily",
       "description": "Read the daily log for a given date (default today).",
-      "command": ["python", "-m", "devlog.kimi_tool", "read_daily"]
+      "command": ["python", "-m", "my_devlog.kimi_tool", "read_daily"]
     },
     {
-      "name": "devlog_archive_inbox",
+      "name": "my-devlog_archive_inbox",
       "description": "Archive inbox.md records into daily/ files by timestamp.",
-      "command": ["python", "-m", "devlog.kimi_tool", "archive_inbox"]
+      "command": ["python", "-m", "my_devlog.kimi_tool", "archive_inbox"]
     },
     {
-      "name": "devlog_generate_weekly",
+      "name": "my-devlog_generate_weekly",
       "description": "Generate weekly report for the previous week.",
-      "command": ["python", "-m", "devlog.kimi_tool", "generate_weekly"]
+      "command": ["python", "-m", "my_devlog.kimi_tool", "generate_weekly"]
     }
   ]
 }

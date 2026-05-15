@@ -31,19 +31,20 @@ classifiers = [
 ]
 
 [project.scripts]
-devlog-sync = "devlog.sync:main"
-devlog-mark-done = "devlog.mark_done:main"
-devlog-search = "devlog.search:main"
-devlog-backup = "devlog.backup:main"
-devlog-obsidian = "devlog.obsidian:main"
-devlog-mcp = "devlog.mcp_server:main"
-devlog-auto-record = "devlog.auto_record:main"
+devlog-sync = "my_devlog.sync:main"
+devlog-mark-done = "my_devlog.mark_done:main"
+devlog-search = "my_devlog.search:main"
+devlog-backup = "my_devlog.backup:main"
+devlog-obsidian = "my_devlog.obsidian:main"
+devlog-mcp = "my_devlog.mcp_server:main"
+devlog-auto-record = "my_devlog.auto_record:main"
+devlog-statusline = "my_devlog.statusline:main"
 
 [project.optional-dependencies]
 web = ["streamlit>=1.30.0"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["devlog"]
+packages = ["my_devlog"]
 
 [project.urls]
 Homepage = "https://github.com/yourusername/my-devlog"

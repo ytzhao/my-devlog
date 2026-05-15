@@ -14,7 +14,7 @@ def init_devlog(root_dir=None, install_skills=True):
     """Initialize DevLog directory structure.
     
     Args:
-        root_dir: DevLog root directory. Defaults to ~/.devlog/
+        root_dir: DevLog root directory. Defaults to ~/.my-devlog/
         install_skills: Whether to copy AI skill files to global config dirs
     """
     config = DevLogConfig(root_dir)
@@ -90,7 +90,7 @@ def _install_ai_skills():
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Initialize DevLog")
-    parser.add_argument("--root", help="DevLog root directory (default: ~/.devlog/)")
+    parser.add_argument("--root", help="DevLog root directory (default: ~/.my-devlog/)")
     parser.add_argument("--no-skills", action="store_true",
                         help="Skip installing AI skill files")
     args = parser.parse_args()

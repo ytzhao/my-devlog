@@ -13,7 +13,7 @@ from pathlib import Path
 class DevLogConfig:
     """Manages DevLog configuration from environment and config files."""
 
-    DEFAULT_DIR_NAME = ".devlog"
+    DEFAULT_DIR_NAME = ".my-devlog"
     CONFIG_FILENAME = "config.md"
 
     def __init__(self, root_dir=None):
@@ -24,8 +24,8 @@ class DevLogConfig:
         """Resolve DevLog root directory with priority:
         1. Explicit override
         2. DEVLOG_ROOT environment variable
-        3. Current directory's .devlog/config.md (if exists)
-        4. User home directory ~/.devlog/
+        3. Current directory's .my-devlog/config.md (if exists)
+        4. User home directory ~/.my-devlog/
         """
         if override:
             return Path(override).expanduser().resolve()
@@ -47,7 +47,7 @@ class DevLogConfig:
         return home / self.DEFAULT_DIR_NAME
 
     def _load_config(self):
-        """Load config from root/.devlog/config.md"""
+        """Load config from root/.my-devlog/config.md"""
         config = {
             "root_dir": str(self.root),
             "symbol_set": "unicode",

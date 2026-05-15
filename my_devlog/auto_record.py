@@ -8,13 +8,13 @@ content, and writes to daily log. Designed to be called by AI tool hooks
 
 Usage:
     # Analyze latest Kimi session
-    python -m devlog.auto_record --kimi
+    python -m my_devlog.auto_record --kimi
 
     # Analyze specific session file
-    python -m devlog.auto_record --file ~/.kimi/sessions/xxx/context.jsonl
+    python -m my_devlog.auto_record --file ~/.kimi/sessions/xxx/context.jsonl
 
     # Dry-run (show what would be recorded without writing)
-    python -m devlog.auto_record --kimi --dry-run
+    python -m my_devlog.auto_record --kimi --dry-run
 """
 
 import argparse
